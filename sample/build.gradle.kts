@@ -11,10 +11,6 @@ android {
         versionName = "1.0.0"
     }
     
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompilerVersion.get()
-    }
-
     packaging {
         resources {
             pickFirsts += "META-INF/androidx.compose.*.version"
