@@ -1,0 +1,19 @@
+name: Publish All Libraries Release
+
+# Manually triggered release of every library at once.
+# Each library runs as its own parallel job via the shared release workflow,
+# and a failure in one does not cancel the others.
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-release:
+    name: Publish ${{ matrix.project }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [ compose, compose-semantics, compose-test, compose-ui ]
+    uses: ./.github/workflows/publish-release-workflow.yaml
+    with:
+      project: ${{ matrix.project }}
+    secrets: inherit

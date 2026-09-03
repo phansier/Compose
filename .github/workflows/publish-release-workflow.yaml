@@ -19,7 +19,6 @@ jobs:
           distribution: "temurin"
           java-version: 17
           cache: gradle
-      - uses: little-core-labs/get-git-tag@v3.0.2
       - name: Deploy Release to OSSRH
         run: ./gradlew :$PROJECT:publishDefaultPublicationToOSSHRRepository -PreleaseMode=RELEASE
         env:
