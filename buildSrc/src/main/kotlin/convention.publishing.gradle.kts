@@ -1,4 +1,4 @@
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import io.github.kakaocup.Github
 import java.net.URI
 
@@ -112,7 +112,7 @@ tasks.register<Zip>("bundleForCentralSigned") {
 }
 
 fun readVersion(): String {
-    return project.properties.getValue("lib.version.${project.name}")?.toString() ?: throw Exception("Undefined version '\"lib.version.${project.name}\"' in versions.properties")
+    return project.findProperty("lib.version.${project.name}")?.toString() ?: throw Exception("Undefined version '\"lib.version.${project.name}\"' in versions.properties")
 }
 
 fun findCollaborators() = Action<MavenPomDeveloperSpec> {

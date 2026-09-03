@@ -1,4 +1,4 @@
-import com.android.build.gradle.AppExtension
+import com.android.build.api.dsl.ApplicationExtension
 import io.github.kakaocup.withVersionCatalog
 
 plugins {
@@ -8,29 +8,26 @@ plugins {
 }
 
 withVersionCatalog { libs ->
-    configure<AppExtension>() {
-        defaultConfig {
+    configure<ApplicationExtension> {
+        defaultConfig.apply {
             targetSdk = libs.versions.targetSdk.get().toInt()
+            multiDexEnabled = true
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
-        testOptions {
+        testOptions.apply {
             animationsDisabled = true
         }
 
-        signingConfigs {
-            create("kakao") {
-                storeFile = rootProject.layout.projectDirectory.file("buildsystem/debug.keystore").asFile
-                storePassword = "android"
-                keyAlias = "kakaodebugkey"
-                keyPassword = "android"
-            }
+        signingConfigs.create("kakao") {
+            storeFile = rootProject.layout.projectDirectory.file("buildsystem/debug.keystore").asFile
+            storePassword = "android"
+            keyAlias = "kakaodebugkey"
+            keyPassword = "android"
         }
 
-        buildTypes {
-            named("debug") {
-                signingConfig = signingConfigs.getByName("kakao")
-            }
+        buildTypes.getByName("debug") {
+            signingConfig = signingConfigs.getByName("kakao")
         }
     }
 }

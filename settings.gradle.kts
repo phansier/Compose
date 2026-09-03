@@ -24,7 +24,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("org.gradle.toolchains:foojay-resolver:0.7.0")
+        classpath("org.gradle.toolchains:foojay-resolver:1.0.0")
     }
 }
 

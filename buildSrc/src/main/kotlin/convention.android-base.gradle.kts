@@ -1,12 +1,11 @@
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.CommonExtension
 import io.github.kakaocup.withVersionCatalog
 
 withVersionCatalog { libs ->
-    configure<BaseExtension> {
-        compileSdkVersion(libs.versions.compileSdk.get().toInt())
-        defaultConfig {
+    configure<CommonExtension> {
+        compileSdk = libs.versions.compileSdk.get().toInt()
+        defaultConfig.apply {
             minSdk = libs.versions.minSdk.get().toInt()
-            multiDexEnabled = true
         }
     }
 }
