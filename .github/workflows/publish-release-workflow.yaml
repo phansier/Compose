@@ -27,3 +27,19 @@ jobs:
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           PROJECT: ${{ inputs.project }}
+
+      # The Gradle upload above only lands in the OSSRH Staging API compatibility
+      # service. This call transfers the deployment to the Central Portal and,
+      # with publishing_type=automatic, releases it to Maven Central once it
+      # passes validation. It must run in the same job as the upload because the
+      # service resolves the default repository by namespace + client IP.
+      # See https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
+      - name: Release ${{ inputs.project }} to Maven Central
+        run: |
+          TOKEN=$(printf '%s:%s' "$SONATYPE_USERNAME" "$SONATYPE_PASSWORD" | base64 -w0)
+          URL="https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/io.github.kakaocup"
+          curl --fail-with-body -sS -X POST -H "Authorization: Bearer $TOKEN" "$URL?publishing_type=automatic&deployment_name=$PROJECT-$GITHUB_RUN_NUMBER"
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PROJECT: ${{ inputs.project }}
